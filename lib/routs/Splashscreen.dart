@@ -28,7 +28,7 @@ class _SplashscreenState extends State<Splashscreen> {
             children: [
               // Logo or Image
               Image.asset(
-                'assets/background.jpg', // Replace with your logo path
+                'assets/logo-preview.png', // Replace with your logo path
                 width: 150,
                 height: 150,
               ),
