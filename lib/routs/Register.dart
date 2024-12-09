@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:recho/routs/HomePage.dart';
 import 'package:recho/routs/login.dart';
 import 'package:recho/widgets/Text_Field.dart';
 
@@ -17,6 +19,59 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
+  Future<void> _register(String phoneNumber,String password) async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        String email='$phoneNumber@recho.com';
+        final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        credential.user!.updateDisplayName(_fullNameController.text);
+        // await firebaseDatabase.push().set({
+        //   'userName': userNameController.text,
+        //   'email': emailController.text,
+        //   'password': passwordController.text,
+        //   'userId': credential.user?.uid,
+        // });
+        // userNameController.clear();
+
+        // CacheHelper.putBoolData(key: "isLogin", value:true);
+        // CacheHelper.putData(key: "userId", value: credential.user!.uid.toString());
+        // CacheHelper.putData(key: "email", value: credential.user!.email.toString());
+        // CacheHelper.putData(key: "userName", value: userNameController.text);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تم التسجيل بنجاح')),
+        );
+
+        // Reset form fields after submission
+        _formKey.currentState!.reset();
+        _passwordController.clear();
+        _confirmPasswordController.clear();
+        _fullNameController.clear();
+        _emailController.clear();
+        _phoneController.clear();
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
+
+
+
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          print('The password provided is too weak.');
+        } else if (e.code == 'email-already-in-use') {
+          print('The account already exists for that phone number.');
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('تأكد من إدخال جميع الحقول بشكل صحيح')),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +132,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   label: 'رقم الجوال',
                   controller: _phoneController,
                   validator: (value) {
-                    if (value == null || value.length != 10) {
+                    if (value == null || value.length !< 10) {
                       return 'رقم الجوال غير صحيح';
                     } else {
                       return null;
@@ -115,23 +170,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('تم التسجيل بنجاح')),
-                        );
-
-                        // Reset form fields after submission
-                        _formKey.currentState!.reset();
-                        _passwordController.clear();
-                        _confirmPasswordController.clear();
-                        _fullNameController.clear();
-                        _emailController.clear();
-                        _phoneController.clear();
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('تأكد من إدخال جميع الحقول بشكل صحيح')),
-                        );
-                      }
+                    _register(_phoneController.text, _passwordController.text);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
@@ -171,89 +210,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
 }
 
-// Widget _buildTextField({
-  //   required String label,
-  //   TextEditingController? controller,
-  //   bool isPassword = false,
-  //   String? Function(String?)? validator,
-  // }) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.end,
-  //     children: [
-  //       TextFormField(
-  //         obscureText: isPassword,
-  //         controller: controller,
-  //         validator: validator,
-  //         decoration: InputDecoration(
-  //           hintText: label,
-  //           filled: true,
-  //           fillColor: Colors.white, // Set fill color to white (or any color you prefer)
-  //           border: OutlineInputBorder(
-  //             borderRadius: BorderRadius.circular(8.0),
-  //             borderSide: const BorderSide(color: Colors.blue, width: 2.0), // Blue border
-  //           ),
-  //           contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-  //           errorStyle: const TextStyle(
-  //             color: Colors.red,
-  //             fontSize: 12,
-  //             height: 1.5,
-  //           ),
-  //         ),
-  //         textAlign: TextAlign.right,
-  //         textDirection: TextDirection.rtl,
-  //       ),
-  //     ],
-  //   );
-  // }
 
-
-
-//
-// Widget _buildTextField({
-//   required String hintText,
-//   required String label,
-//   TextEditingController? controller,
-//   bool isPassword = false,
-//   String? Function(String?)? validator,
-// }) {
-//   return Column(
-//     crossAxisAlignment: CrossAxisAlignment.end,
-//     children: [
-//       Text(
-//         label,
-//         style: const TextStyle(
-//           fontSize: 16,
-//           fontWeight: FontWeight.bold,
-//           color: Colors.grey,
-//         ),
-//       ),
-//       const SizedBox(height: 5),
-//       TextFormField(
-//         obscureText: isPassword,
-//         controller: controller,
-//         onChanged: validator,
-//         validator: validator,
-//         decoration: InputDecoration(
-//           hintText: hintText,
-//           filled: true,
-//           fillColor: Colors.grey[200],
-//           border: OutlineInputBorder(
-//             borderRadius: BorderRadius.circular(8.0),
-//             borderSide: BorderSide.none,
-//           ),
-//           contentPadding:
-//           const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-//           errorStyle: const TextStyle(
-//             color: Colors.red,
-//             fontSize: 12,
-//             height: 1.5,
-//           ),
-//         ),
-//
-//         textAlign: TextAlign.right,
-//         textDirection: TextDirection.rtl,
-//       ),
-//
-//
-//     ],
-//   );

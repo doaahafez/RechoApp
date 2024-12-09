@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recho/routs/ProfileForm.dart';
 
 class Myprofile extends StatefulWidget {
   const Myprofile({super.key});
@@ -116,7 +117,12 @@ class _MyprofileState extends State<Myprofile> {
                           backgroundColor: Colors.blue,
 
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => ProfileForm()),
+                          );
+                        },
                         child: Text('تعديل البيانات' ,
                           style: TextStyle(
                             color: Colors.white, // Text color

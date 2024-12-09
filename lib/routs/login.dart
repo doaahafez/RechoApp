@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:recho/routs/HomePage.dart';
+import 'package:recho/routs/Register.dart';
 import 'package:recho/widgets/Header_With_Gradient.dart';
 import 'package:recho/widgets/Text_Field.dart';
 
@@ -13,21 +15,44 @@ class Login extends StatefulWidget {
 }
 
   class _LoginState extends State<Login> {
-  final List<String> sentences = [
+
+    final _formKey = GlobalKey<FormState>();
+    final TextEditingController _phoneController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
+    final List<String> sentences = [
   "مرحباً بك في تطبيق Recho",
   "اطلب طعامك المفضل بضغطة زر",
   "توصيل سريع لجميع المناطق",
   ];
-
-  final List<List<Color>> gradients = [
+    final List<List<Color>> gradients = [
   [Colors.green, Colors.blue],
   [Colors.orange, Colors.red],
   [Colors.purple, Colors.pink],
   ];
+    int currentIndex = 0;
+    late Timer _timer;
 
-  int currentIndex = 0;
-  late Timer _timer;
+    Future<void> _login(String phoneNumber,String password) async {
+      if (_formKey.currentState!.validate()) {
+        try {
+          String email = '$phoneNumber@recho.com';
+          UserCredential userCredential = await FirebaseAuth.instance
+              .signInWithEmailAndPassword(email: email, password: password);
 
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        } catch (e) {
+          print(e);
+        }
+      }
+      else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تأكد من إدخال جميع الحقول بشكل صحيح')),
+        );
+      }
+    }
   @override
   void initState() {
   super.initState();
@@ -91,45 +116,78 @@ class Login extends StatefulWidget {
                       ),
                     ],
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      buildTextField(
-                        label: 'رقم الجوال',
-                        hintText: 'أدخل رقم الجوال',
-                      ),
-                      const SizedBox(height: 15),
-                      buildTextField(
-                        label: 'كلمة المرور',
-                        hintText: 'أدخل كلمة المرور',
-                        obscureText: true,
-                      ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => HomePage()),
-                            );                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        buildTextField(
+                          label: 'رقم الجوال',
+                          hintText: 'أدخل رقم الجوال',
+                          controller: _phoneController,
+                          validator: (value) {
+                            if (value == null || value.length !< 10) {
+                              return 'رقم الجوال غير صحيح';
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        buildTextField(
+                          label: 'كلمة المرور',
+                          hintText: 'أدخل كلمة المرور',
+                          obscureText: true,
+                          controller: _passwordController,
+                          validator: (value) {
+                            if (value == null || value.length < 8) {
+                              return "كلمة المرور غير صحيحة";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                             _login(_phoneController.text, _passwordController.text);
+                              },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
-                          ),
-                          child: const Text(
-                            'تسجيل الدخول',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
+                            child: const Text(
+                              'تسجيل الدخول',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 10),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                            );
+                          },
+                          child: const Text(
+                            'ليس لديك حساب؟ انشاء حساب',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.blue,
+
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

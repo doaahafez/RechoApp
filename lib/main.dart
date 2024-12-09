@@ -1,8 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:recho/routs/Splashscreen.dart';
 
 
 void main()async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp(
+      options: FirebaseOptions(
+        apiKey: "AIzaSyC61vP_kf1z-78EdK5CO-rK0cGXTvq2TsU",
+        projectId: "recho-de013",
+        messagingSenderId: "744711300993",
+        appId: "1:744711300993:android:9c9b6cb451735278162a80",
+      ));
 
   runApp(MyApp());
 }
@@ -22,9 +31,8 @@ class _MyAppState extends State<MyApp> {
     return
       MaterialApp(
         debugShowCheckedModeBanner: false,
-        home:
-        // supportedLocales: const [Locale('ar')]
-        Splashscreen(),
+        home:Splashscreen(),
+
       );
   }
 }

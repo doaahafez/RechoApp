@@ -7,6 +7,7 @@ import 'package:recho/routs/Register.dart';
 import 'package:recho/routs/login.dart';
 
 import 'CallLogScreen.dart';
+import 'dart:async';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -16,6 +17,43 @@ class Splashscreen extends StatefulWidget {
 }
 
 class _SplashscreenState extends State<Splashscreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _startTimer();
+  }
+
+  double _progressValue = 0.0;
+    late Timer _timer;
+    final int _duration = 3;
+
+    void _startTimer() {
+      const interval = Duration(milliseconds: 100);
+      final int totalTicks = _duration * 10;
+      int ticks = 0;
+
+      _timer = Timer.periodic(interval, (Timer timer) {
+        setState(() {
+          if (ticks >= totalTicks) {
+            _progressValue = 1.0;
+            _timer.cancel();
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Login()));
+          } else {
+            _progressValue = ticks / totalTicks;
+            ticks++;
+          }
+        });
+      });
+    }
+
+    @override
+    void dispose() {
+      _timer.cancel();
+      super.dispose();
+    }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -28,7 +66,7 @@ class _SplashscreenState extends State<Splashscreen> {
             children: [
               // Logo or Image
               Image.asset(
-                'assets/background.jpg', // Replace with your logo path
+                'assets/logo-preview.png', // Replace with your logo path
                 width: 150,
                 height: 150,
               ),
@@ -44,169 +82,48 @@ class _SplashscreenState extends State<Splashscreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
-            Center(
-                          child: MaterialButton(
-                            color: Colors.white,
-                            textColor: Colors.blue,
-                            onPressed: () {
-                              Navigator.push(
-                                  context, MaterialPageRoute(builder: (context) => RegisterScreen()));
-                            },
-                            child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                                child: Text(
-                                  "انشاء حساب جديد",
-                                  style: TextStyle(fontSize: 20),
-                                )),
-                          ),
-                        ),
-
-        ],
+             //  const SizedBox(height: 20),
+             // Stack(
+             //   children: [
+             //     Center(
+             //       child:
+             //       CircularProgressIndicator(
+             //         value: _progressValue,
+             //         strokeWidth: 6.0,
+             //         backgroundColor: Colors.grey[200],
+             //         color: Colors.blue[500],
+             //       ),
+             //     ),
+             //     // Center(
+             //     //   child: Text("recho",
+             //     //       style: const TextStyle(
+             //     //         fontSize: 24,
+             //     //         fontWeight: FontWeight.bold,
+             //     //         color: Colors.white,
+             //     //       )
+             //     //   ),
+             //     //
+             //     // )
+             //   ],
+             // )
+            ],
     )
     )
       )
     );
-    // return Scaffold(
-    //   body:  Column(
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //         children: [
-    //           Center(
-    //             child: MaterialButton(
-    //               color: Colors.blue,
-    //               textColor: Colors.white,
-    //               onPressed: () {
-    //                 Navigator.push(
-    //                     context, MaterialPageRoute(builder: (context) => RegisterScreen()));
-    //               },
-    //               child: Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
-    //                   child: Text(
-    //                     "انشاء حساب جديد",
-    //                     style: TextStyle(fontSize: 20),
-    //                   )),
-    //             ),
-    //           ),
-    //           Center(
-    //             child: MaterialButton(
-    //               color: Colors.blue,
-    //               textColor: Colors.white,
-    //               onPressed: () {
-    //                 Navigator.push(
-    //                     context, MaterialPageRoute(builder: (context) => CallLogscreen()));
-    //
-    //               },
-    //               child: Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
-    //                   child: Text(
-    //                     "سجل المكالمات",
-    //                     style: TextStyle(fontSize: 20),
-    //                   )),
-    //
-    //             ),
-    //           ),
-    //           Center(
-    //             child: MaterialButton(
-    //               color: Colors.blue,
-    //               textColor: Colors.white,
-    //               onPressed: () {
-    //                 Navigator.push(
-    //                     context, MaterialPageRoute(builder: (context) => WalletScreen()));
-    //
-    //               },
-    //               child: Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
-    //                   child: Text(
-    //                     "محفظتي",
-    //                     style: TextStyle(fontSize: 20),
-    //                   )
-    //               ),
-    //             ),
-    //           ),
-    //
-    //           Center(
-    //             child: MaterialButton(
-    //               color: Colors.blue,
-    //               textColor: Colors.white,
-    //               onPressed: () {
-    //                 Navigator.push(
-    //                     context, MaterialPageRoute(builder: (context) =>  ProfileForm()));
-    //
-    //               },
-    //               child: Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
-    //                   child: Text(
-    //                     "بياناتي",
-    //                     style: TextStyle(fontSize: 20),
-    //                   )
-    //               ),
-    //             ),
-    //           ),
-    //           Center(
-    //             child: MaterialButton(
-    //               color: Colors.blue,
-    //               textColor: Colors.white,
-    //               onPressed: () {
-    //                 Navigator.push(
-    //                     context, MaterialPageRoute(builder: (context) =>  HomePage()));
-    //
-    //               },
-    //               child: Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
-    //                   child: Text(
-    //                     "الصفحه الرئيسيه",
-    //                     style: TextStyle(fontSize: 20),
-    //                   )
-    //               ),
-    //             ),
-    //           ),
-    //
-    //           Center(
-    //             child: MaterialButton(
-    //               color: Colors.blue,
-    //               textColor: Colors.white,
-    //               onPressed: () {
-    //                 Navigator.push(
-    //                     context, MaterialPageRoute(builder: (context) =>  Login()));
-    //
-    //               },
-    //               child: Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
-    //                   child: Text(
-    //                     "تسجيل دخول",
-    //                     style: TextStyle(fontSize: 20),
-    //                   )
-    //               ),
-    //             ),
-    //           ),
-    //
-    //           Center(
-    //             child: MaterialButton(
-    //               color: Colors.blue,
-    //               textColor: Colors.white,
-    //               onPressed: () {
-    //                 Navigator.push(
-    //                     context, MaterialPageRoute(builder: (context) =>  Myprofile()));
-    //
-    //               },
-    //               child: Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
-    //                   child: Text(
-    //                     "حسابي الشحصي",
-    //                     style: TextStyle(fontSize: 20),
-    //                   )
-    //               ),
-    //             ),
-    //           ),
-    //
-    //         ],
-    //       ),
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    // );
   }
 }
+// MaterialButton(
+//   color: Colors.white,
+//   textColor: Colors.blue,
+//   onPressed: () {
+//     Navigator.push(
+//         context, MaterialPageRoute(builder: (context) => RegisterScreen()));
+//   },
+//   child: Padding(
+//       padding: const EdgeInsets.symmetric(horizontal: 30.0),
+//       child: Text(
+//         "انشاء حساب جديد",
+//         style: TextStyle(fontSize: 20),
+//       )),
+// ),
