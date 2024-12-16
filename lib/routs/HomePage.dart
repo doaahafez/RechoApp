@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recho/routs/CallLogScreen.dart';
 import 'package:recho/routs/MyProfile.dart';
 import 'package:recho/routs/Splashscreen.dart';
 import 'package:recho/routs/WalletScreen.dart';
@@ -87,6 +88,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               _buildDrawerItem(Icons.home, 'الرئيسية',HomePage()),
               _buildDrawerItem(Icons.person, 'حسابي الشخصي',Myprofile()),
               _buildDrawerItem(Icons.account_balance_wallet, 'محفظتي',WalletScreen()),
+              _buildDrawerItem(Icons.call, 'سجل المكالمات',CallLogscreen()),
               _buildDrawerItem(Icons.file_copy, 'الشروط والأحكام',HomePage()),
               _buildDrawerItem(Icons.mail, 'اتصل بنا',HomePage()),
               _buildDrawerItem(Icons.logout, 'تسجيل الخروج',Splashscreen()),
@@ -1079,7 +1081,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         textAlign: TextAlign.right,
       ),
       onTap: (){
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => NavigatorPag),
         );
