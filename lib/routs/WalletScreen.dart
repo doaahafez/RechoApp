@@ -28,73 +28,67 @@ class _WalletScreenState extends State<WalletScreen> {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                balanceCard('الرصيد الحالي', '500 نقطة'),
-                balanceCard('الرصيد السابق', '400 نقطة'),
-              ],
-            ),
-            SizedBox(height: 20),
-            Text(
-              'شحن الرصيد',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-
-            ),
-            SizedBox(height: 20),
-            TextFormField(
-              textAlign: TextAlign.center,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'رقم البطاقة',
+      body:SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  balanceCard('الرصيد الحالي', '500 نقطة'),
+                  balanceCard('الرصيد السابق', '400 نقطة'),
+                ],
               ),
-            ),
-            SizedBox(height: 10),
-            TextFormField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'تاريخ الإنتهاء',
+              SizedBox(height: 20),
+              Row(
+                  textDirection: TextDirection.rtl,
+                  children:[ Text(
+                'شحن الرصيد',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+
+              ),]),
+
+              SizedBox(height: 20),
+              _buildTextField(
+                label: 'رقم البطاقة',
+                hintText: 'رقم البطاقة',
+              ),
+              SizedBox(height: 10),
+              _buildTextField(
+                label: 'تاريخ الإنتهاء',
                 hintText: 'MM/YY',
               ),
-            ),
-            SizedBox(height: 10),
-            TextFormField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'رمز الأمان CVV',
+              SizedBox(height: 10),
+              _buildTextField(
+                label: 'رمز الأمان CVV',
+                hintText: 'رمز الأمان CVV',
               ),
-            ),
-            SizedBox(height: 10),
-            TextFormField(
-              textAlign: TextAlign.right,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'المبلغ (بالريال)',
+              SizedBox(height: 10),
+              _buildTextField(
+                label: 'المبلغ (بالريال)',
+                hintText: 'المبلغ (بالريال)',
               ),
-            ),
-            SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                ),
-                onPressed: () {},
-                child: Text(
-                  'شحن الرصيد',
-                  style: TextStyle(fontSize: 16,color: Colors.white),
+              SizedBox(height: 20),
+              Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    'شحن الرصيد',
+                    style: TextStyle(fontSize: 16,color: Colors.white),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 
@@ -121,6 +115,46 @@ class _WalletScreenState extends State<WalletScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildTextField({
+    required String label,
+    required String hintText,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.blue,
+          ),
+        ),
+        const SizedBox(height: 5),
+        TextFormField(
+          maxLines: 1,
+          decoration: InputDecoration(
+            hintText: hintText,
+            filled: true,
+            fillColor: Colors.blue[50],
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0),
+              borderSide: const BorderSide(color: Colors.blue),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0),
+              borderSide: const BorderSide(color: Colors.blue, width: 2),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+          ),
+          textAlign: TextAlign.right,
+          textDirection: TextDirection.rtl,
+        ),
+      ],
     );
   }
 }

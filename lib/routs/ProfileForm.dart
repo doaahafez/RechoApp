@@ -16,7 +16,7 @@ class _ProfileFormState extends State<ProfileForm> {
   String? accountType = "شخصي";
 
   // List of options for dropdowns
-  final List<String> countries = ['قطر','عمان','البحرين','الكويت', 'الامارات العربية المتحدة', 'المملكة العربية السعودية'];
+  final List<String> countries = ['قطر','عمان','البحرين','الكويت', 'الامارات العربية المتحدة', 'المملكة العربية السعودية','مصر'];
   final List<String> cities = ['الكويت', 'الجهراء', 'حولي','الفروانية'];
 
   @override

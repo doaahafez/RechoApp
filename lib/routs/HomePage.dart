@@ -214,7 +214,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                     children: [
                                       SizedBox(height: 8),
                                       Text(
-                                        "المهنة: 'طبيب",
+                                        "المهنة: طبيب",
                                         style: TextStyle(
                                           fontSize: 14,
                                         ),
@@ -420,7 +420,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         elevation: 4,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: Row(
+                          child:
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
