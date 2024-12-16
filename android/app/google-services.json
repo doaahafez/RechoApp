@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "744711300993",
+    "project_id": "recho-de013",
+    "storage_bucket": "recho-de013.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744711300993:android:9c9b6cb451735278162a80",
+        "android_client_info": {
+          "package_name": "com.resho.RechoApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC61vP_kf1z-78EdK5CO-rK0cGXTvq2TsU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
