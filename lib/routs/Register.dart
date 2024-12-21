@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:recho/routs/HomePage.dart';
 import 'package:recho/routs/login.dart';
@@ -18,16 +19,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
-
+  late final uid;
+  final DatabaseReference _dataRef = FirebaseDatabase.instance.ref().child('Users');
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<void> _register(String phoneNumber,String password) async {
+
+
     if (_formKey.currentState!.validate()) {
       try {
         String email='$phoneNumber@recho.com';
+        // String email=_emailController.text;
         final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
-        credential.user!.updateDisplayName(_fullNameController.text);
+        // credential.user!.updateDisplayName(_fullNameController.text);
+        credential.user?.updateDisplayName(_fullNameController.text);
+        print("fullnameController from register ${_fullNameController.text}");
         // await firebaseDatabase.push().set({
         //   'userName': userNameController.text,
         //   'email': emailController.text,
@@ -40,6 +48,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
         // CacheHelper.putData(key: "userId", value: credential.user!.uid.toString());
         // CacheHelper.putData(key: "email", value: credential.user!.email.toString());
         // CacheHelper.putData(key: "userName", value: userNameController.text);
+
+        final User? user = _auth.currentUser;
+        uid = user!.uid;
+
+        _dataRef.push().set({
+          'UserUid': uid,
+          'UserName': _fullNameController.text,
+          'email': _emailController.text,
+          'phoneNumber':_phoneController.text,
+          'password':_passwordController.text,
+        });
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('تم التسجيل بنجاح')),
@@ -59,8 +78,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           print('The password provided is too weak.');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('كلمه المرور ضعيفه')),
+          );
         } else if (e.code == 'email-already-in-use') {
           print('The account already exists for that phone number.');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('هذا الحساب موجود بالفعل')),
+          );
         }
       } catch (e) {
         print(e);

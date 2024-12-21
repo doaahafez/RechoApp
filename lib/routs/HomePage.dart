@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:recho/routs/CallLogScreen.dart';
 import 'package:recho/routs/MyProfile.dart';
@@ -6,6 +7,8 @@ import 'package:recho/routs/WalletScreen.dart';
 import 'dart:async';
 
 import 'package:recho/widgets/Header_With_Gradient.dart';
+
+import 'ChatScreen.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -36,10 +39,21 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     });
   }
 
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
+  late final uid;
+  late final email;
+  late final userName;
   @override
   void initState() {
     super.initState();
+
+    final User? user = FirebaseAuth.instance.currentUser;
+    uid = user!.uid;
+    // email = user.email;
+    userName = user.displayName;
+    print("userName from home $userName");
+
     _startTimer();
     _tabController = TabController(length: categories.length, vsync: this);
     _tabController.addListener(() {
@@ -61,11 +75,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          // title: Text(
-          //   'Recho ',
-          //   style: TextStyle(color: Colors.white),
-          // ),
-          // centerTitle: true,
+          title: Text(
+            'اهلا بك $userName ',
+            style: TextStyle(color: Colors.white),
+          ),
+          centerTitle: true,
           backgroundColor: Colors.blue,
           actions: [
             Icon(Icons.person),
@@ -153,96 +167,106 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               ),
             ),
             SizedBox(height: 10),
+
+
             Expanded(
               child: TabBarView(controller: _tabController, children: [
                 SingleChildScrollView(
                   child:Column(
                     children: [
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        elevation: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // User avatar
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.blue,
-                                child: Text(
-                                  "أ",
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                              // User details
-                              Column(
-                                children: [
-                                  Text(
-                                    "أحمد",
+                      GestureDetector(
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // User avatar
+                                CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: Colors.blue,
+                                  child: Text(
+                                    "أ",
                                     style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24,
+                                      color: Colors.white,
                                     ),
-                                    textAlign: TextAlign.right,
-                                  ),
-                                  Text(
-                                    "متصل الآن",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.green,
-                                    ),
-                                    textAlign: TextAlign.right,
-                                  ),
-                                ],
-                              ),
-                              Card(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    side: BorderSide.none
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(height: 8),
-                                      Text(
-                                        "المهنة: طبيب",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                        ),
-                                        textAlign: TextAlign.right,
-                                      ),
-                                      Text(
-                                        "المدينة: الرياض",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                        ),
-                                        textAlign: TextAlign.right,
-                                      ),
-                                      Text(
-                                        "نبذة: مطور تطبيقات ويب بخبرة 5 سنوات",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                        ),
-                                        textAlign: TextAlign.right,
-                                      ),
-                                    ],
                                   ),
                                 ),
-                              ),
+                                // User details
+                                Column(
+                                  children: [
+                                    Text(
+                                      "أحمد",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                    Text(
+                                      "متصل الآن",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.green,
+                                      ),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ],
+                                ),
+                                Card(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                      side: BorderSide.none
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 8),
+                                        Text(
+                                          "المهنة: طبيب",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                        Text(
+                                          "المدينة: الرياض",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                        Text(
+                                          "نبذة: مطور تطبيقات ويب بخبرة 5 سنوات",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
 
-                            ],
+                              ],
+                            ),
                           ),
                         ),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> ChatScreen()));
+                          // Navigator.push(context, MaterialPageRoute(builder: (context)=> ChatScreen(reseiverId:Users[index]["UserUid"],)));
+                        },
                       ),
+
+
                       Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -1067,6 +1091,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
               ]),
             ),
+
+
+
+
+
             SizedBox(height: 20),
           ],
         ),
